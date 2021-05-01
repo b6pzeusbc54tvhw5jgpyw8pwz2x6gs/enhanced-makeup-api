@@ -5,4 +5,5 @@ export const isEnvSlsStage = (o: any): o is EnvSlsStage =>
 export interface Envs {
   ENV_SLS_STAGE: EnvSlsStage
   ENV_REVISION: string
+  EMA_CACHE_BUCKET: string
 }

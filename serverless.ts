@@ -1,22 +1,24 @@
 import type { AWS } from '@serverless/typescript'
 import { Envs, isEnvSlsStage } from './src/types/env.type'
 import { isNotEmptyString } from './src/utils/typecheck.util'
+import {name} from './package.json'
 
 const {
-  ENV_SLS_STAGE, ENV_REVISION,
+  ENV_SLS_STAGE, ENV_REVISION, EMA_CACHE_BUCKET,
 } = process.env
 
 // Through the build-time type check here,
 // environment variables can be used in runtime code without additional type checking.
 if(!isEnvSlsStage(ENV_SLS_STAGE)) throw new Error('Check required env: ENV_SLS_STAGE')
 if(!isNotEmptyString(ENV_REVISION)) throw new Error('Check required env: ENV_REVISION')
+if(!isNotEmptyString(EMA_CACHE_BUCKET)) throw new Error('Check required env: EMA_CACHE_BUCKET')
 
 const envs: Envs = {
-  ENV_SLS_STAGE, ENV_REVISION,
+  ENV_SLS_STAGE, ENV_REVISION, EMA_CACHE_BUCKET,
 }
 
 const serverlessConfiguration: AWS = {
-  service: 'typescript-serverless-tsoa',
+  service: name,
   frameworkVersion: '2',
   custom: {
     webpack: {
@@ -50,14 +52,24 @@ const serverlessConfiguration: AWS = {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       ...envs,
     },
+    iamRoleStatements: [
+      {
+        Effect: "Allow",
+        Action: ["s3:PutObject","s3:GetObject"],
+        Resource: `arn:aws:s3:::${EMA_CACHE_BUCKET}/*`
+      },
+      {
+        Effect: "Allow",
+        Action: ["s3:ListBucket"],
+        Resource: `arn:aws:s3:::${EMA_CACHE_BUCKET}`
+      },
+    ]
   },
   functions: {
     index: {
       handler: 'src/handler.index',
       events: [
-        ...['post','get','put','delete'].map(method => ({
-          http: { method, path: '/{pathname+}' }
-        })),
+        { httpApi: '*' },
       ],
     }
   }

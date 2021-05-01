@@ -6,6 +6,7 @@ import { Envs } from "../types/env.type"
 const envs: Envs = process.env as any
 export const ENV_SLS_STAGE = envs.ENV_SLS_STAGE
 export const ENV_REVISION = envs.ENV_REVISION
+export const EMA_CACHE_BUCKET = envs.EMA_CACHE_BUCKET
 
 // Using AWS Lambda environment variables
 // https://docs.aws.amazon.com/ko_kr/lambda/latest/dg/configuration-envvars.html#configuration-envvars-runtime
