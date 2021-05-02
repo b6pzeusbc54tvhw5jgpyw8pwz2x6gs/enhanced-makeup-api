@@ -61,7 +61,10 @@ const serverlessConfiguration: AWS = {
         Action: ["s3:ListBucket"],
         Resource: `arn:aws:s3:::${EMA_CACHE_BUCKET}`
       },
-    ]
+    ],
+    httpApi: {
+      cors: true,
+    },
   },
   functions: {
     index: {
