@@ -14,7 +14,6 @@ $ yarn
 ### Environments
 
 ```
-export ENV_SLS_STAGE=local
 export ENV_REVISION='your-git-revision'
 ```
 

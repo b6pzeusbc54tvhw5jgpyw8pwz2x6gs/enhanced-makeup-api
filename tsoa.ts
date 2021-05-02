@@ -10,7 +10,7 @@ import { ExtendedSpecConfig, ExtendedRoutesConfig } from "@tsoa/cli"
 # typescript-serverless-tsoa Example
 - https://github.com/ACupofCommit/typescript-serverless-tsoa
     `.trim(),
-    basePath: '/' + process.env.ENV_SLS_STAGE,
+    basePath: '/',
     specVersion: 3,
     outputDirectory: "./src",
 

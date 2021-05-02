@@ -1,20 +1,19 @@
 import type { AWS } from '@serverless/typescript'
-import { Envs, isEnvSlsStage } from './src/types/env.type'
+import { Envs} from './src/types/env.type'
 import { isNotEmptyString } from './src/utils/typecheck.util'
 import {name} from './package.json'
 
 const {
-  ENV_SLS_STAGE, ENV_REVISION, EMA_CACHE_BUCKET,
+  ENV_REVISION, EMA_CACHE_BUCKET,
 } = process.env
 
 // Through the build-time type check here,
 // environment variables can be used in runtime code without additional type checking.
-if(!isEnvSlsStage(ENV_SLS_STAGE)) throw new Error('Check required env: ENV_SLS_STAGE')
 if(!isNotEmptyString(ENV_REVISION)) throw new Error('Check required env: ENV_REVISION')
 if(!isNotEmptyString(EMA_CACHE_BUCKET)) throw new Error('Check required env: EMA_CACHE_BUCKET')
 
 const envs: Envs = {
-  ENV_SLS_STAGE, ENV_REVISION, EMA_CACHE_BUCKET,
+  ENV_REVISION, EMA_CACHE_BUCKET,
 }
 
 const serverlessConfiguration: AWS = {
@@ -43,7 +42,6 @@ const serverlessConfiguration: AWS = {
     name: 'aws',
     lambdaHashingVersion: "20201221",
     runtime: 'nodejs14.x',
-    stage: '${env:ENV_SLS_STAGE, "local"}',
     apiGateway: {
       shouldStartNameWithService: true,
       minimumCompressionSize: 1024,

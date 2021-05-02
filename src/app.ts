@@ -10,7 +10,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(morgan(':remote-addr - :remote-user [:date[iso]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"'))
 
-if (process.env.TST_SLS_STAGE !== 'prod') {
+if (process.env.NODE_ENV !== 'production') {
   const swaggerJson = require("./swagger.json")
   app.use('/docs', swaggerUi.serveWithOptions({redirect: false}))
   app.get('/docs', swaggerUi.setup(swaggerJson))

@@ -4,7 +4,6 @@ import { Envs } from "../types/env.type"
 
 // You can do this by adding a type checking codes to the `serverless.ts` file.
 const envs: Envs = process.env as any
-export const ENV_SLS_STAGE = envs.ENV_SLS_STAGE
 export const ENV_REVISION = envs.ENV_REVISION
 export const EMA_CACHE_BUCKET = envs.EMA_CACHE_BUCKET
 

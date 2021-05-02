@@ -20,7 +20,7 @@ export class UsersController extends Controller {
   public async proxy(
     @Request() req: ExRequest,
     @Query() offset: number=0,
-    @Query() limit: number=40,
+    @Query() limit: number=20,
   ): Promise<any[]> {
     const updatedQuery = omit(req.query, 'limit', 'offset')
     const Key = keys(updatedQuery).length > 0
