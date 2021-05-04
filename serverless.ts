@@ -42,6 +42,7 @@ const serverlessConfiguration: AWS = {
     name: 'aws',
     lambdaHashingVersion: "20201221",
     runtime: 'nodejs14.x',
+    timeout: 15,
     apiGateway: {
       shouldStartNameWithService: true,
       minimumCompressionSize: 1024,
