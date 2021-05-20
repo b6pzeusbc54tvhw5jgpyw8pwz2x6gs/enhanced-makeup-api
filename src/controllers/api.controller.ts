@@ -1,8 +1,8 @@
-import { Controller, Get, Query, Request, Route } from "@tsoa/runtime"
+import { Controller, Get, Path, Query, Request, Route } from "@tsoa/runtime"
 import {omit, union, compact} from 'lodash'
 import { Request as ExRequest } from "express"
 import { APIService } from "../services/api.service"
-import { APIData } from "../types/api.type"
+import { APIData, APIList } from "../types/api.type"
 
 @Route("/api")
 export class UsersController extends Controller {
@@ -15,7 +15,7 @@ export class UsersController extends Controller {
     @Request() req: ExRequest,
     @Query() offset: number=0,
     @Query() limit: number=20,
-  ): Promise<APIData> {
+  ): Promise<APIList> {
     const updatedQuery = omit(req.query, 'limit', 'offset')
     if (limit > 80) throw new Error('Maximum limit is 80')
 
@@ -29,8 +29,16 @@ export class UsersController extends Controller {
     }
   }
 
+  @Get('/v1/products/{productId}.json')
+  public async product(@Path() productId: number): Promise<APIData> {
+    const fullList = await new APIService().get('api/v1/products.json')
+
+    const data = fullList.find(d => d.id === productId)
+    return { ok: true, data }
+  }
+
   @Get('/v1/brands.json')
-  public async brands(): Promise<APIData> {
+  public async brands(): Promise<APIList> {
     const data = await new APIService().get('api/v1/products.json')
     const brands = data.reduce((prev, current) => union([...prev, current.brand]), [])
     const compacted = compact(brands)
@@ -38,7 +46,7 @@ export class UsersController extends Controller {
   }
 
   @Get('/v1/tags.json')
-  public async tags(): Promise<APIData> {
+  public async tags(): Promise<APIList> {
     const data = await new APIService().get('api/v1/products.json')
     const tags = data.reduce((prev, current) => union([...prev, ...current.tag_list]), [])
     const compacted = compact(tags)
@@ -46,7 +54,7 @@ export class UsersController extends Controller {
   }
 
   @Get('/v1/categories.json')
-  public async categories(): Promise<APIData> {
+  public async categories(): Promise<APIList> {
     const data = await new APIService().get('api/v1/products.json')
     const categories = data.reduce((prev, current) => union([...prev, current.category]), [])
     const compacted = compact(categories)
@@ -54,7 +62,7 @@ export class UsersController extends Controller {
   }
 
   @Get('/v1/product_types.json')
-  public async productTypes(): Promise<APIData> {
+  public async productTypes(): Promise<APIList> {
     const data = await new APIService().get('api/v1/products.json')
     const productTypes = data.reduce((prev, current) => union([...prev, current.product_type]), [])
     const compacted = compact(productTypes)
